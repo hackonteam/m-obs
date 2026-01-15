@@ -218,6 +218,31 @@ See full API documentation at `/docs` endpoint or `docs/API.md`.
 - [UI/UX Spec](docs/UI_UX_SPEC.md)
 - [Implementation Tasks](TASKS.md)
 
+## Team
+
+**HackOn Team Vietnam**
+
+M-OBS is developed and maintained by HackOn Team Vietnam, a dedicated team focused on building innovative blockchain infrastructure tools.
+
+### Contact
+
+- **Email**: work.hackonteam@gmail.com
+- **Telegram**: https://t.me/hackonteam
+
+### Team Members
+
+- **Bernie Nguyen** - Founder, Leader of HackOn Team Vietnam; Full-stack developer; Main developer
+- **Thien Vo** - Front-end developer intern
+- **Canh Trinh** - Researcher, Back-end developer intern
+- **Sharkyz Duong Pham** - Business developer lead
+- **Hieu Tran** - Business developer
+
+### Collaboration
+
+This project is developed in collaboration with **Phu Nhuan Builder**.
+
+- **Email**: phunhuanbuilder@gmail.com
+
 ## Contributing
 
 1. Fork the repository
