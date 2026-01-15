@@ -12,10 +12,10 @@
 ### 📊 Repository Structure
 ```
 m-obs/
-├── apps/
-│   ├── api/          ✅ FastAPI REST API (5 endpoints)
-│   ├── worker/       ✅ Async Python worker (2 pipelines)
-│   └── web/          ✅ SvelteKit frontend (6 pages)
+├── backend/
+│   ├── api/          ✅ FastAPI REST API (11 endpoints)
+│   └── worker/       ✅ Async Python worker (4 pipelines)
+├── frontend/         ✅ SvelteKit frontend (6 pages)
 ├── supabase/
 │   └── migrations/   ✅ 11 SQL migrations (complete schema)
 ├── docs/             📝 Placeholder for P1
