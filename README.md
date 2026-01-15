@@ -2,6 +2,12 @@
 
 A Mantle-focused observability and transaction triage console for developers and non-technical stakeholders.
 
+## 🚀 Live Demo
+
+**Production URL:** https://m-obs.hackon.team/
+
+Try it now - real-time monitoring of Mantle mainnet!
+
 ## 📦 Repositories
 
 This is the main coordination repository. The application is split into separate repositories:
