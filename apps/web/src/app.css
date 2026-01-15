@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	body {
+		@apply bg-background text-text-primary;
+		@apply font-sans antialiased;
+	}
+	
+	/* Typography */
+	.text-display {
+		@apply text-[32px] leading-[40px] font-bold;
+	}
+	
+	.text-h1 {
+		@apply text-[24px] leading-[32px] font-semibold;
+	}
+	
+	.text-h2 {
+		@apply text-[20px] leading-[28px] font-semibold;
+	}
+	
+	.text-h3 {
+		@apply text-[16px] leading-[24px] font-semibold;
+	}
+	
+	.text-body {
+		@apply text-[14px] leading-[20px];
+	}
+	
+	.text-small {
+		@apply text-[12px] leading-[16px];
+	}
+	
+	.text-mono {
+		@apply font-mono text-[13px] leading-[18px];
+	}
+}
+
+@layer components {
+	/* Card */
+	.card-base {
+		@apply bg-surface rounded-lg p-6 border border-border;
+	}
+	
+	/* Focus styles */
+	.focus-ring {
+		@apply focus:outline-none focus:ring-2 focus:ring-accent-primary;
+	}
+}
