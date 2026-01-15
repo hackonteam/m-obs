@@ -2,6 +2,16 @@
 
 A Mantle-focused observability and transaction triage console for developers and non-technical stakeholders.
 
+## 📦 Repositories
+
+This is the main coordination repository. The application is split into separate repositories:
+
+- **🔗 Main Repository:** https://github.com/hackonteam/m-obs (this repo)
+- **⚙️ Backend:** https://github.com/hackonteam/m-obs-backend (API + Worker)
+- **🎨 Frontend:** https://github.com/hackonteam/m-obs-frontend (SvelteKit Web App)
+
+Each repository contains its own README with specific setup and deployment instructions.
+
 ## Overview
 
 M-OBS provides real-time monitoring, transaction analysis, and alerting for Mantle mainnet:
@@ -39,7 +49,10 @@ M-OBS provides real-time monitoring, transaction analysis, and alerting for Mant
 - **Database**: Supabase PostgreSQL
 - **Frontend**: SvelteKit + Tailwind + DaisyUI
 - **Charts**: uPlot
-- **Deployment**: Railway (api + worker), Supabase
+- **Deployment**: 
+  - Backend: Render.com (API + Worker)
+  - Frontend: Vercel
+  - Database: Supabase
 
 ## Quick Start
 
@@ -49,58 +62,75 @@ M-OBS provides real-time monitoring, transaction analysis, and alerting for Mant
 - Node.js 20+
 - pnpm 8+
 - Supabase account
-- Railway account (for deployment)
+- Render.com account (for backend deployment)
+- Vercel account (for frontend deployment)
 
-### Local Setup
+### Repository Setup
 
-1. **Clone and install dependencies:**
+1. **Clone all repositories:**
    ```bash
-   git clone <repo-url>
+   # Main repository (coordination + database)
+   git clone https://github.com/hackonteam/m-obs.git
    cd m-obs
+   
+   # Backend repository (optional, for development)
+   git clone https://github.com/hackonteam/m-obs-backend.git
+   
+   # Frontend repository (optional, for development)
+   git clone https://github.com/hackonteam/m-obs-frontend.git
    ```
 
 2. **Set up database:**
    ```bash
-   # Install Supabase CLI
+   # From main repository
+   cd m-obs/supabase
+   
+   # Install Supabase CLI (if not already installed)
    npm install -g supabase
    
    # Link to your project
-   cd supabase
    supabase link --project-ref <your-project-ref>
    
    # Run migrations
    supabase db push
    ```
 
-3. **Configure environment:**
+3. **Set up and run backend:**
    ```bash
+   # See backend repository for detailed instructions
+   cd m-obs-backend
+   
+   # Configure environment
    cp .env.example .env
    # Edit .env with your credentials
-   ```
-
-4. **Run services:**
-   ```bash
-   # Terminal 1: Worker
-   cd backend/worker
-   python -m venv venv
-   source venv/bin/activate
+   
+   # Terminal 1: Run Worker
+   cd worker
+   python -m venv venv && source venv/bin/activate
    pip install -e .
    python -m src.main
    
-   # Terminal 2: API
-   cd backend/api
-   python -m venv venv
-   source venv/bin/activate
+   # Terminal 2: Run API
+   cd api
+   python -m venv venv && source venv/bin/activate
    pip install -e .
    uvicorn src.main:app --reload
+   ```
+
+4. **Set up and run frontend:**
+   ```bash
+   # See frontend repository for detailed instructions
+   cd m-obs-frontend
    
-   # Terminal 3: Frontend
-   cd frontend
+   # Configure environment
+   echo "PUBLIC_API_URL=http://localhost:8000" > .env
+   
+   # Install and run
    pnpm install
    pnpm dev
    ```
 
-5. **Access:**
+5. **Access the application:**
    - Frontend: http://localhost:5173
    - API: http://localhost:8000
    - API Docs: http://localhost:8000/docs
@@ -134,68 +164,167 @@ Configured in `supabase/migrations/00010_seed_rpc_endpoints.sql`:
 
 ## Development
 
-### Project Structure
+### Repository Structure
 
+The project is organized into separate repositories:
+
+**Main Repository (this repo):**
 ```
 m-obs/
-├── backend/
-│   ├── api/          # FastAPI REST API
-│   └── worker/       # Async ingestion worker
-├── frontend/         # SvelteKit frontend
 ├── supabase/
-│   └── migrations/   # SQL migrations
+│   └── migrations/   # Database schema and migrations (11 files)
+├── docs/             # Project documentation
 ├── packages/
-│   └── shared/       # Shared TypeScript types
-└── docs/             # Documentation
+│   └── shared/       # Shared types (future use)
+├── README.md         # This file
+├── IMPLEMENTATION.md # Implementation status
+└── TASKS.md          # Development roadmap
 ```
 
-### Adding a Migration
+**Backend Repository:** https://github.com/hackonteam/m-obs-backend
+```
+m-obs-backend/
+├── api/              # FastAPI REST API (11 endpoints)
+│   ├── src/
+│   │   ├── routes/   # API endpoints
+│   │   └── models/   # Pydantic schemas
+│   └── pyproject.toml
+├── worker/           # Python async worker (4 pipelines)
+│   ├── src/
+│   │   ├── pipelines/    # Background pipelines
+│   │   ├── providers/    # RPC client & manager
+│   │   └── decoders/     # Error decoding
+│   └── pyproject.toml
+└── README.md         # Backend-specific documentation
+```
 
+**Frontend Repository:** https://github.com/hackonteam/m-obs-frontend
+```
+m-obs-frontend/
+├── src/
+│   ├── routes/       # SvelteKit pages (6 pages)
+│   │   ├── +page.svelte           # Dashboard
+│   │   ├── transactions/          # Transaction explorer
+│   │   ├── providers/             # Provider health
+│   │   └── alerts/                # Alert management
+│   └── lib/
+│       ├── api/      # API client
+│       └── components/  # Reusable components
+├── static/
+└── README.md         # Frontend-specific documentation
+```
+
+### Working with Multiple Repositories
+
+**Main repository (database migrations):**
 ```bash
-cd supabase
+cd m-obs/supabase
 supabase migration new <migration_name>
 # Edit the created file
 supabase db push
 ```
 
-### Running Tests
-
+**Backend development:**
 ```bash
-# API tests
-cd backend/api
-pytest
+cd m-obs-backend
+# See backend README for detailed development guide
+# Run tests: cd api && pytest
+# Run tests: cd worker && pytest
+```
 
-# Worker tests
-cd backend/worker
-pytest
-
-# Frontend tests
-cd frontend
-pnpm test
+**Frontend development:**
+```bash
+cd m-obs-frontend
+# See frontend README for detailed development guide
+# Run tests: pnpm test
+# Type check: pnpm check
 ```
 
 ## Deployment
 
-### Railway
+M-OBS uses a split deployment architecture for optimal performance and scalability:
 
-1. **Create services:**
-   - `m-obs-api` (backend/api)
-   - `m-obs-worker` (backend/worker)
-   - `m-obs-web` (frontend)
-
-2. **Set environment variables** for each service
-
-3. **Deploy:**
-   ```bash
-   # Using Railway CLI
-   railway up
-   ```
-
-### Supabase
+### 🗄️ Database (Supabase)
 
 1. Create project at https://supabase.com
-2. Link locally: `supabase link --project-ref <ref>`
-3. Push migrations: `supabase db push`
+2. Link locally from this repository:
+   ```bash
+   cd supabase
+   supabase link --project-ref <your-project-ref>
+   supabase db push
+   ```
+3. Note your database URL for backend configuration
+
+### ⚙️ Backend (Render.com)
+
+Deploy backend services (API + Worker) to Render.com:
+
+1. **Fork/Clone:** https://github.com/hackonteam/m-obs-backend
+2. **Follow deployment guide:** See `backend/README.md` in backend repository
+3. **Services to create:**
+   - `m-obs-api` - Web Service (FastAPI)
+   - `m-obs-worker` - Background Worker (Python)
+4. **Configure environment variables** with your Supabase credentials
+5. **Note your API URL** for frontend configuration
+
+**Detailed instructions:** https://github.com/hackonteam/m-obs-backend#deployment-on-rendercom
+
+### 🎨 Frontend (Vercel)
+
+Deploy frontend to Vercel:
+
+1. **Fork/Clone:** https://github.com/hackonteam/m-obs-frontend
+2. **Follow deployment guide:** See `frontend/README.md` in frontend repository
+3. **Import project** to Vercel from GitHub
+4. **Configure environment variable:**
+   ```
+   PUBLIC_API_URL=https://your-api.onrender.com
+   ```
+5. **Deploy** and note your Vercel URL
+
+**Detailed instructions:** https://github.com/hackonteam/m-obs-frontend#deployment-on-vercel
+
+### 🔗 Final Configuration
+
+After deploying all services:
+
+1. **Update backend CORS** on Render to include your Vercel URL:
+   ```
+   CORS_ORIGINS=https://your-app.vercel.app
+   ```
+
+2. **Test end-to-end:**
+   - Visit your Vercel URL
+   - Check dashboard loads with data
+   - Verify API connectivity
+   - Monitor logs on Render and Vercel
+
+### 📊 Deployment Architecture
+
+```
+┌──────────────────┐
+│  Vercel          │
+│  (Frontend)      │
+│  SvelteKit       │
+└────────┬─────────┘
+         │ HTTPS
+         ▼
+┌──────────────────┐
+│  Render.com      │
+│  ┌─────────────┐ │
+│  │ API Service │ │────┐
+│  └─────────────┘ │    │
+│  ┌─────────────┐ │    │
+│  │   Worker    │ │────┤
+│  └─────────────┘ │    │
+└──────────────────┘    │
+                        │ PostgreSQL
+                        ▼
+               ┌──────────────────┐
+               │  Supabase        │
+               │  PostgreSQL      │
+               └──────────────────┘
+```
 
 ## API Reference
 
@@ -245,11 +374,31 @@ This project is developed in collaboration with **Phu Nhuan Builder**.
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+Contributions are welcome! Each repository has its own contribution workflow:
+
+### Contributing to Backend
+1. Fork https://github.com/hackonteam/m-obs-backend
+2. Create feature branch: `git checkout -b feature/your-feature`
+3. Make changes and add tests
+4. Submit pull request to backend repository
+
+### Contributing to Frontend
+1. Fork https://github.com/hackonteam/m-obs-frontend
+2. Create feature branch: `git checkout -b feature/your-feature`
+3. Make changes and add tests
+4. Submit pull request to frontend repository
+
+### Contributing Database Migrations
+1. Fork this repository (main)
+2. Create migration in `supabase/migrations/`
+3. Test locally with `supabase db push`
+4. Submit pull request
+
+### General Guidelines
+- Follow existing code style and conventions
+- Add tests for new features
+- Update documentation as needed
+- Use semantic commit messages (feat:, fix:, docs:, etc.)
 
 ## License
 
