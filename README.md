@@ -7,6 +7,7 @@ A Mantle-focused observability and transaction triage console for developers and
 This is the main coordination repository. The application is split into separate repositories:
 
 - **🔗 Main Repository:** https://github.com/hackonteam/m-obs (this repo)
+- **🗄️ Database:** https://github.com/hackonteam/m-obs-database (Schema + Migrations)
 - **⚙️ Backend:** https://github.com/hackonteam/m-obs-backend (API + Worker)
 - **🎨 Frontend:** https://github.com/hackonteam/m-obs-frontend (SvelteKit Web App)
 
