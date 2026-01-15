@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import uPlot from 'uplot';
+	import 'uplot/dist/uPlot.min.css';
 	
 	export let data: { timestamps: number[]; values: number[] };
 	export let title: string = '';
