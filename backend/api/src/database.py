@@ -1,9 +1,11 @@
 """Database connection and query helpers."""
 import asyncpg
-import ssl
+import logging
 from typing import Any, Optional
 
 from .config import config
+
+logger = logging.getLogger(__name__)
 
 
 class Database:
@@ -14,19 +16,23 @@ class Database:
 
     async def connect(self) -> None:
         """Establish database connection pool."""
-        # Use DATABASE_URL directly with SSL configuration
-        # Supabase requires SSL connections
-        ssl_context = ssl.create_default_context()
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
-        
-        self.pool = await asyncpg.create_pool(
-            config.database_url,
-            min_size=2,
-            max_size=20,
-            command_timeout=30,
-            ssl=ssl_context,
-        )
+        try:
+            # Supabase connection with proper SSL (require SSL but don't verify cert for managed services)
+            # asyncpg will use SSL automatically when connecting to Supabase
+            # statement_cache_size=0 is required for pgbouncer (Supabase Connection Pooler)
+            self.pool = await asyncpg.create_pool(
+                config.database_url,
+                min_size=2,
+                max_size=20,
+                command_timeout=60,
+                timeout=30,
+                ssl='require',  # Require SSL but let asyncpg handle it properly
+                statement_cache_size=0,  # Disable prepared statements for pgbouncer
+            )
+            logger.info("Database connection pool created successfully")
+        except Exception as e:
+            logger.error(f"Failed to connect to database: {e}")
+            raise
 
     async def disconnect(self) -> None:
         """Close database connection pool."""

@@ -114,7 +114,7 @@
 				<LineChart 
 					data={{ 
 						timestamps: metrics.series.timestamps, 
-						values: metrics.series.gas_price_avg.map((v: number) => v / 1e9) 
+						values: metrics.series.gas_price_avg.map((v) => v / 1e9) 
 					}}
 					title="Gas Price (Gwei)"
 					color="#3B82F6"
