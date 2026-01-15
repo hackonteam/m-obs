@@ -1,13 +1,17 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { getTransactions } from '$lib/api/client';
 	
 	let transactions: any[] = [];
 	let loading = true;
 	let status = 'all';
+	let refreshInterval: any;
 	
 	async function loadTransactions() {
-		loading = true;
+		// Don't show loading spinner on auto-refresh, only on initial load
+		const isInitialLoad = transactions.length === 0;
+		if (isInitialLoad) loading = true;
+		
 		const result = await getTransactions({ status: status as any, limit: 50 });
 		if (result.data) {
 			transactions = result.data.transactions || [];
@@ -17,6 +21,12 @@
 	
 	onMount(() => {
 		loadTransactions();
+		// Auto-refresh every 10 seconds
+		refreshInterval = setInterval(loadTransactions, 10000);
+	});
+	
+	onDestroy(() => {
+		if (refreshInterval) clearInterval(refreshInterval);
 	});
 	
 	function formatTimestamp(ts: number): string {

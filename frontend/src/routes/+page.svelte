@@ -9,6 +9,10 @@
 	let refreshInterval: any;
 	
 	async function loadData() {
+		// Don't show loading spinner on auto-refresh, only on initial load
+		const isInitialLoad = !metrics;
+		if (isInitialLoad) loading = true;
+		
 		// Load metrics for last hour
 		const now = Math.floor(Date.now() / 1000);
 		const metricsResult = await getMetricsOverview({
@@ -35,8 +39,8 @@
 	
 	onMount(() => {
 		loadData();
-		// Refresh every 30 seconds
-		refreshInterval = setInterval(loadData, 30000);
+		// Refresh every 10 seconds for more real-time updates
+		refreshInterval = setInterval(loadData, 10000);
 	});
 	
 	onDestroy(() => {

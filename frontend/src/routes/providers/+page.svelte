@@ -1,16 +1,31 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { getProvidersHealth } from '$lib/api/client';
 	
 	let providers: any[] = [];
 	let loading = true;
+	let refreshInterval: any;
 	
-	onMount(async () => {
+	async function loadProviders() {
+		// Don't show loading spinner on auto-refresh, only on initial load
+		const isInitialLoad = providers.length === 0;
+		if (isInitialLoad) loading = true;
+		
 		const result = await getProvidersHealth(24);
 		if (result.data) {
 			providers = result.data.providers || [];
 		}
 		loading = false;
+	}
+	
+	onMount(() => {
+		loadProviders();
+		// Auto-refresh every 15 seconds
+		refreshInterval = setInterval(loadProviders, 15000);
+	});
+	
+	onDestroy(() => {
+		if (refreshInterval) clearInterval(refreshInterval);
 	});
 </script>
 
