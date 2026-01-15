@@ -81,21 +81,21 @@ M-OBS provides real-time monitoring, transaction analysis, and alerting for Mant
 4. **Run services:**
    ```bash
    # Terminal 1: Worker
-   cd apps/worker
+   cd backend/worker
    python -m venv venv
    source venv/bin/activate
    pip install -e .
    python -m src.main
    
    # Terminal 2: API
-   cd apps/api
+   cd backend/api
    python -m venv venv
    source venv/bin/activate
    pip install -e .
    uvicorn src.main:app --reload
    
    # Terminal 3: Frontend
-   cd apps/web
+   cd frontend
    pnpm install
    pnpm dev
    ```
@@ -138,10 +138,10 @@ Configured in `supabase/migrations/00010_seed_rpc_endpoints.sql`:
 
 ```
 m-obs/
-├── apps/
+├── backend/
 │   ├── api/          # FastAPI REST API
-│   ├── worker/       # Async ingestion worker
-│   └── web/          # SvelteKit frontend
+│   └── worker/       # Async ingestion worker
+├── frontend/         # SvelteKit frontend
 ├── supabase/
 │   └── migrations/   # SQL migrations
 ├── packages/
@@ -162,15 +162,15 @@ supabase db push
 
 ```bash
 # API tests
-cd apps/api
+cd backend/api
 pytest
 
 # Worker tests
-cd apps/worker
+cd backend/worker
 pytest
 
 # Frontend tests
-cd apps/web
+cd frontend
 pnpm test
 ```
 
@@ -179,9 +179,9 @@ pnpm test
 ### Railway
 
 1. **Create services:**
-   - `m-obs-api` (apps/api)
-   - `m-obs-worker` (apps/worker)
-   - `m-obs-web` (apps/web)
+   - `m-obs-api` (backend/api)
+   - `m-obs-worker` (backend/worker)
+   - `m-obs-web` (frontend)
 
 2. **Set environment variables** for each service
 
