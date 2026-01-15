@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .config import config
 from .database import db
-from .routes import health, providers, transactions, contracts
+from .routes import health, providers, transactions, contracts, metrics
 
 # Configure logging
 logging.basicConfig(
@@ -51,6 +51,7 @@ app.add_middleware(
 
 # Register routes
 app.include_router(health.router)
+app.include_router(metrics.router)
 app.include_router(providers.router)
 app.include_router(transactions.router)
 app.include_router(contracts.router)
