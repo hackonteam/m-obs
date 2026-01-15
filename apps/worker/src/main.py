@@ -7,6 +7,7 @@ import sys
 from .config import config
 from .database import db
 from .pipelines.provider_probe import probe
+from .pipelines.block_scanner import scanner
 
 # Configure logging
 logging.basicConfig(
@@ -35,8 +36,8 @@ class Worker:
         # Start pipelines
         self.tasks = [
             asyncio.create_task(probe.run(), name="provider_probe"),
+            asyncio.create_task(scanner.run(), name="block_scanner"),
             # TODO: Add other pipelines
-            # asyncio.create_task(scanner.run(), name="block_scanner"),
             # asyncio.create_task(rollup.run(), name="metrics_rollup"),
             # asyncio.create_task(alerts.run(), name="alert_evaluator"),
         ]
