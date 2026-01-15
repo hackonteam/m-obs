@@ -9,6 +9,7 @@ from .database import db
 from .pipelines.provider_probe import probe
 from .pipelines.block_scanner import scanner
 from .pipelines.metrics_rollup import rollup
+from .pipelines.alert_evaluator import evaluator
 
 # Configure logging
 logging.basicConfig(
@@ -39,8 +40,7 @@ class Worker:
             asyncio.create_task(probe.run(), name="provider_probe"),
             asyncio.create_task(scanner.run(), name="block_scanner"),
             asyncio.create_task(rollup.run(), name="metrics_rollup"),
-            # TODO: Add alert pipeline
-            # asyncio.create_task(alerts.run(), name="alert_evaluator"),
+            asyncio.create_task(evaluator.run(), name="alert_evaluator"),
         ]
         
         logger.info(f"Started {len(self.tasks)} pipelines")
