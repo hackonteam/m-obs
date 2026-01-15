@@ -38,7 +38,8 @@ Frequently asked questions and pitch deck preparation.
 
 ## 🚀 Quick Links
 
-- **Live Demo:** https://m-obs-project.vercel.app/
+- **🌐 Production URL:** https://m-obs.hackon.team/ ⭐ **[TRY IT NOW]**
+- **Live Demo (Vercel):** https://m-obs-project.vercel.app/
 - **API Docs:** https://m-obs-api.onrender.com/docs
 - **GitHub Repositories:**
   - Main: https://github.com/hackonteam/m-obs
